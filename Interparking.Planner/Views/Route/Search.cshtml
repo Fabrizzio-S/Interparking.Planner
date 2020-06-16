@@ -1,0 +1,116 @@
+﻿@model Interparking.Planner.ViewModels.RouteSearchViewModel
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <input class="form-control" id="start" type="text" placeholder="Départ" autocomplete="true" data-url="/api/Parking">
+            <input class="form-control" id="end" type="text" placeholder="Arrivée" autocomplete="true" data-url="/api/Parking">
+            <table id="routes" class="table"></table>
+        </div>
+        <div class="col-lg-8">
+            <div id="map" style="width:100%;height:500px;"></div>
+            <form asp-action="Edit" method="post">
+                <input id="Route" type="hidden" asp-for="Route" />
+                <button type="submit" id="saveRoute" class="btn btn-primary">Sauver la route</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <environment include="Development">
+        <script src="~/node_modules/bootstrap-autocomplete/dist/latest/bootstrap-autocomplete.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleApiKey"]"></script>
+    </environment>
+    <environment exclude="Development">
+
+    </environment>
+
+    <script>
+        var savedRoute;
+        var startPoint;
+        var endPoint;
+        var directionsService = new google.maps.DirectionsService();
+        var directionsRenderer = new google.maps.DirectionsRenderer({
+            draggable: true,
+            directions_changed: saveRoute
+        });
+
+        $('#start').autoComplete().on('autocomplete.select', function (event, item) {
+            startPoint = new google.maps.LatLng(item.parking.latitude, item.parking.longitude);
+            calculateAndDisplayRoutes()
+        });
+        $('#end').autoComplete().on('autocomplete.select', function (event, item) {
+            endPoint = new google.maps.LatLng(item.parking.latitude, item.parking.longitude);
+            calculateAndDisplayRoutes()
+        });
+
+        var map = new google.maps.Map(document.getElementById('map'),
+            {
+                zoom: 7,
+                center: { lat: 50.845052, lng: 4.349985 },
+            });
+        directionsRenderer.setMap(map);
+
+        function calculateAndDisplayRoutes() {
+            if (!startPoint || !endPoint) {
+                return
+            }
+            directionsService.route(
+                {
+                    origin: startPoint,
+                    destination: endPoint,
+                    travelMode: 'DRIVING',
+                    provideRouteAlternatives: true
+                },
+                function (response, status) {
+                    loadNewRoutes(response, status);
+                });
+        }
+
+        function loadNewRoutes(response, status) {
+            if (status === 'OK') {
+                $("#routes").empty();
+                for (var i = 0, len = response.routes.length; i < len; i++) {
+                    var legs = response.routes[i].legs[0];
+                    var kms = (legs.distance.value / 1000).toFixed(1);;
+                    $("#routes").append($('<tr>')
+                        .append($('<td/>',
+                            {
+                                text: "Route " + (i + 1) + " - " + kms + " km - (" + legs.duration.text + ")",
+                                value: i
+                            }).
+                            click(function (x, y) {
+                                var index = x.target.getAttribute('value');
+                                directionsRenderer.setRouteIndex(parseInt(index));
+                                saveRoute();
+                            })
+                        )
+                    );
+                }
+                directionsRenderer.setDirections(response);
+            }
+            else {
+                window.alert('Directions request failed due to ' + status);
+            }
+        }
+
+        function saveRoute() {
+            savedRoute = {};
+            var leg = directionsRenderer.directions.routes[0].legs[0];
+            savedRoute.startPoint = { 'latitude': leg.start_location.lat(), 'longitude': leg.start_location.lng() }
+            savedRoute.endPoint = { 'latitude': leg.end_location.lat(), 'longitude': leg.end_location.lng() }
+            savedRoute.wayPoints = [];
+
+            var legWaypoints = leg.via_waypoints
+            for (var i = 0; i < legWaypoints.length; i++) {
+                savedRoute.wayPoints[i] = { 'latitude': legWaypoints[i].lat(), 'longitude': legWaypoints[i].lng() }
+            }
+
+            document.getElementById('Route').value = JSON.stringify(savedRoute);
+        }
+
+    </script>
+}
+

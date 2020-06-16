@@ -3,3 +3,9 @@
 ################################################################################
 
 /Interparking.Planner/node_modules
+/Interparking.Planner.Data/bin/Debug/netcoreapp3.1
+/Interparking.Planner.Data/obj
+/Interparking.Planner.Data.Contracts/bin/Debug/netcoreapp3.1
+/Interparking.Planner.Data.Contracts/obj
+/Interparking.Planner/obj
+/Interparking.Planner/bin/Debug/netcoreapp3.1
