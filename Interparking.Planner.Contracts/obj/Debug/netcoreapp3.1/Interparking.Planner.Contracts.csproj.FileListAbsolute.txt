@@ -1,0 +1,8 @@
+C:\Worspaces\#Perso\Interparking.Planner\Interparking.Planner.Contracts\bin\Debug\netcoreapp3.1\Interparking.Planner.Contracts.deps.json
+C:\Worspaces\#Perso\Interparking.Planner\Interparking.Planner.Contracts\bin\Debug\netcoreapp3.1\Interparking.Planner.Contracts.dll
+C:\Worspaces\#Perso\Interparking.Planner\Interparking.Planner.Contracts\bin\Debug\netcoreapp3.1\Interparking.Planner.Contracts.pdb
+C:\Worspaces\#Perso\Interparking.Planner\Interparking.Planner.Contracts\obj\Debug\netcoreapp3.1\Interparking.Planner.Contracts.AssemblyInfoInputs.cache
+C:\Worspaces\#Perso\Interparking.Planner\Interparking.Planner.Contracts\obj\Debug\netcoreapp3.1\Interparking.Planner.Contracts.AssemblyInfo.cs
+C:\Worspaces\#Perso\Interparking.Planner\Interparking.Planner.Contracts\obj\Debug\netcoreapp3.1\Interparking.Planner.Contracts.csproj.CoreCompileInputs.cache
+C:\Worspaces\#Perso\Interparking.Planner\Interparking.Planner.Contracts\obj\Debug\netcoreapp3.1\Interparking.Planner.Contracts.dll
+C:\Worspaces\#Perso\Interparking.Planner\Interparking.Planner.Contracts\obj\Debug\netcoreapp3.1\Interparking.Planner.Contracts.pdb

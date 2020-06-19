@@ -1,6 +1,6 @@
 using System;
 
-namespace Interparking.Planner.Models
+namespace Interparking.Planner.ViewModels
 {
     public class ErrorViewModel
     {

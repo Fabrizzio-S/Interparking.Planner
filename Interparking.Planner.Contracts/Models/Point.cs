@@ -1,4 +1,4 @@
-﻿namespace Interparking.Planner.Data.Contracts.Models
+﻿namespace Interparking.Planner.Contracts.Models
 {
     public class Point
     {

@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-
+using AutoMapper;
+using Interparking.Planner.Contracts.Models;
 using Interparking.Planner.Data.Contracts.Interfaces;
-using Interparking.Planner.Data.Contracts.Models;
+using RouteData = Interparking.Planner.Data.Contracts.Models.Route;
 using Interparking.Planner.ViewModels;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Interparking.Planner.Controllers
 {
@@ -14,17 +12,17 @@ namespace Interparking.Planner.Controllers
     {
         #region Variables Declaration
 
-        private readonly IParkingRepository parkingRepository;
         private readonly IRouteRepository routeRepository;
+        private readonly IMapper mapper;
 
         #endregion
 
         #region Constructor
 
-        public RouteController(IParkingRepository parkingRepository, IRouteRepository routeRepository)
+        public RouteController(IRouteRepository routeRepository, IMapper mapper)
         {
-            this.parkingRepository = parkingRepository;
             this.routeRepository = routeRepository;
+            this.mapper = mapper;
         }
 
         #endregion
@@ -33,44 +31,30 @@ namespace Interparking.Planner.Controllers
 
         public ViewResult Search()
         {
-            RouteSearchViewModel findRouteSearchViewModel = new RouteSearchViewModel();
+            var findRouteSearchViewModel = new RouteSearchViewModel();
             return View(findRouteSearchViewModel);
         }
 
         public ActionResult Edit(int routeId)
         {
-            Route route = routeRepository.GetRouteById(routeId);
+            Route route = mapper.Map<RouteData, Route>(routeRepository.GetRouteById(routeId));
             if (route == null)
             {
                 return RedirectToPage("./NotFound");
             }
-            RouteEditViewModel routeEditViewModel = new RouteEditViewModel()
+            var routeEditViewModel = new RouteEditViewModel()
             {
                 Route = route
             };
             return View(routeEditViewModel);
         }
 
-        //public ActionResult Edit(int routeIndex, string startPointLatitude, string startPointLongitude, string endPointLatitude, string endPointLongitude)
-        //{
-        //    Route route = routeRepository.GetRouteById(routeId);
-        //    if (route == null)
-        //    {
-        //        return RedirectToPage("./NotFound");
-        //    }
-        //    RouteEditViewModel routeEditViewModel = new RouteEditViewModel()
-        //    {
-        //        Route = route
-        //    };
-        //    return View(routeEditViewModel);
-        //}
-
         [HttpPost]
         public ActionResult Edit()
         {
             Route route = Newtonsoft.Json.JsonConvert.DeserializeObject<Route>(Request.Form["Route"]);
 
-            RouteEditViewModel routeEditViewModel = new RouteEditViewModel()
+            var routeEditViewModel = new RouteEditViewModel()
             {
                 Route = route
             };
@@ -79,9 +63,9 @@ namespace Interparking.Planner.Controllers
 
         public ViewResult Resume()
         {
-            RouteResumeViewModel routeResumeViewModel = new RouteResumeViewModel()
+            var routeResumeViewModel = new RouteResumeViewModel()
             {
-                Routes = routeRepository.GetRoutes()
+                Routes = mapper.Map<IEnumerable<RouteData>, IEnumerable<Route>>(routeRepository.GetRoutes())
             };
             return View(routeResumeViewModel);
         }
@@ -95,17 +79,16 @@ namespace Interparking.Planner.Controllers
             {
                 return View(findRouteSaveViewModel);
             }
-            if(findRouteSaveViewModel.Route.Id > 0)
+            if (findRouteSaveViewModel.Route.Id > 0)
             {
-                routeRepository.UpdateRoute(findRouteSaveViewModel.Route);
+                routeRepository.UpdateRoute(mapper.Map<Route, RouteData>(findRouteSaveViewModel.Route));
             }
             else
             {
-                routeRepository.AddRoute(findRouteSaveViewModel.Route);
+                routeRepository.AddRoute(mapper.Map<Route, RouteData>(findRouteSaveViewModel.Route));
             }
             routeRepository.Commit();
             return RedirectToAction("Resume");
-            //Todo save datas
         }
 
         #endregion

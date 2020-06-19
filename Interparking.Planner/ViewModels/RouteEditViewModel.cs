@@ -1,4 +1,4 @@
-﻿using Interparking.Planner.Data.Contracts.Models;
+﻿using Interparking.Planner.Contracts.Models;
 
 namespace Interparking.Planner.ViewModels
 {

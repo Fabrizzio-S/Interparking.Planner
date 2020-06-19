@@ -1,8 +1,9 @@
 
+using AutoMapper;
 using Interparking.Planner.Data;
 using Interparking.Planner.Data.Contracts.Interfaces;
 using Interparking.Planner.Data.Mocks;
-
+using Interparking.Planner.Mappings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,14 @@ namespace Interparking.Planner
             );
             services.AddScoped<IParkingRepository, ParkingRepository>();
             services.AddScoped<IRouteRepository, RouteRepository>();
+
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            services.AddSingleton(mappingConfig.CreateMapper());
+
             services.AddControllersWithViews();
         }
 

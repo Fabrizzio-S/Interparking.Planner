@@ -1,6 +1,5 @@
-﻿using Interparking.Planner.Data.Contracts.Models;
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Interparking.Planner.Contracts.Models;
 
 namespace Interparking.Planner.ViewModels
 {

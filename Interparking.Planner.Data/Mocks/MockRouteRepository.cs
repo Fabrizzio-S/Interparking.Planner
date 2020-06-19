@@ -55,8 +55,6 @@ namespace Interparking.Planner.Data.Mocks
             if(existingRoute != null)
             {
                 existingRoute.Name = route.Name;
-                //existingRoute.StartPoint = route.StartPoint;
-                //existingRoute.EndPoint = route.EndPoint;
                 existingRoute.WayPoints = route.WayPoints;
             }
             return existingRoute;

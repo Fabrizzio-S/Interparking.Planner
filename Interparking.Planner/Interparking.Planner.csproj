@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Interparking.Planner.Contracts\Interparking.Planner.Contracts.csproj" />
     <ProjectReference Include="..\Interparking.Planner.Data.Contracts\Interparking.Planner.Data.Contracts.csproj" />
     <ProjectReference Include="..\Interparking.Planner.Data\Interparking.Planner.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Google.Apis" Version="1.46.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.46.0" />
     <PackageReference Include="Google.Apis.Core" Version="1.46.0" />
@@ -23,10 +25,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
     <PackageReference Include="OdeToCode.UseNodeModules" Version="3.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Binders\" />
   </ItemGroup>
 
 </Project>
